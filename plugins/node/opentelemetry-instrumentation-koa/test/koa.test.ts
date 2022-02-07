@@ -135,7 +135,7 @@ describe('Koa Instrumentation', () => {
       );
 
       const router = new KoaRouter();
-      router.get('/post/:id', ctx => {
+      router.get('/post/:id',customMiddleware,  ctx => {
         ctx.body = `Post id: ${ctx.params.id}`;
       });
 
@@ -147,7 +147,7 @@ describe('Koa Instrumentation', () => {
           await httpRequest.get(`http://localhost:${port}/post/0`);
           rootSpan.end();
 
-          assert.deepStrictEqual(memoryExporter.getFinishedSpans().length, 2);
+          assert.deepStrictEqual(memoryExporter.getFinishedSpans().length, 3);
           const requestHandlerSpan = memoryExporter
             .getFinishedSpans()
             .find(span => span.name.includes('router - /post/:id'));
